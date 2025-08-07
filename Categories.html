@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brew Haven - Products</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+     <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <h2>Brew Haven</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link active">Home</a></li>
+                <li><a href="About.html" class="nav-link">About</a></li>
+                <li><a href="Categories.html" class="nav-link">Products</a></li>
+                <li><a href="ContactUs.html" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <section class="page-header">
+        <div class="container">
+            <h1>Our Coffee Menu</h1>
+            <p>Discover our carefully crafted selection of premium coffee drinks</p>
+        </div>
+    </section>
+
+    <section class="products-section">
+        <div class="container">
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">All Products</button>
+                <button class="filter-btn" data-filter="espresso-based">Espresso Based</button>
+                <button class="filter-btn" data-filter="specialty">Specialty Drinks</button>
+                <button class="filter-btn" data-filter="cold">Cold Drinks</button>
+            </div>
+            
+            <div id="products-grid" class="products-grid">
+                <!-- Products will be loaded here by JavaScript -->
+            </div>
+            
+            <div id="loading" class="loading">
+                <p>Loading our delicious coffee menu...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Modal -->
+    <div id="product-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-body">
+                <div class="modal-image">
+                    <img id="modal-img" src="" alt="">
+                </div>
+                <div class="modal-info">
+                    <h2 id="modal-name"></h2>
+                    <p id="modal-ingredients" class="modal-ingredients"></p>
+                    <p id="modal-taste" class="modal-taste"></p>
+                    <p id="modal-price" class="modal-price"></p>
+                    <button class="add-to-cart-btn">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Brew Haven</h3>
+                    <p>Crafting exceptional coffee experiences since 2020.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <p>📍 123 Coffee Street, Bean City</p>
+                    <p>📞 (555) 123-BREW</p>
+                    <p>✉️ hello@brewhaven.com</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Brew Haven. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Load products from JSON
+        async function loadProducts() {
+            try {
+                const response = await fetch('Item.json');
+                const products = await response.json();
+                displayProducts(products);
+                setupFilters(products);
+            } catch (error) {
+                console.error('Error loading products:', error);
+                document.getElementById('loading').innerHTML = '<p>Sorry, we couldn\'t load our menu. Please try again later.</p>';
+            }
+        }
+
+        function displayProducts(products) {
+            const productsGrid = document.getElementById('products-grid');
+            const loading = document.getElementById('loading');
+            
+            loading.style.display = 'none';
+            
+            productsGrid.innerHTML = products.map(product => `
+                <div class="product-card" data-category="${getCategory(product.name)}">
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.name}" onerror="this.src='https://images.unsplash.com/photo-1509042239860-f550ce710b93?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'">
+                        <div class="product-overlay">
+                            <button class="quick-view-btn" onclick="openModal('${product.name}', '${product.image}', '${product.ingredients}', '${product.taste}', '${product.price}')">
+                                Quick View
+                            </button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3>${product.name}</h3>
+                        <p class="product-taste">${product.taste}</p>
+                        <div class="product-footer">
+                            <span class="product-price">${product.price}</span>
+                            <button class="add-to-cart" onclick="addToCart('${product.name}', '${product.price}')">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getCategory(productName) {
+            const espressoBased = ['Espresso', 'Cappuccino', 'Latte', 'Americano', 'Macchiato', 'Flat White'];
+            const specialty = ['Mocha', 'Irish Coffee', 'Affogato'];
+            const cold = ['Cold Brew'];
+            
+            if (espressoBased.includes(productName)) return 'espresso-based';
+            if (specialty.includes(productName)) return 'specialty';
+            if (cold.includes(productName)) return 'cold';
+            return 'all';
+        }
+
+        function setupFilters(products) {
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const productCards = document.querySelectorAll('.product-card');
+
+            filterButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Remove active class from all buttons
+                    filterButtons.forEach(b => b.classList.remove('active'));
+                    // Add active class to clicked button
+                    btn.classList.add('active');
+
+                    const filter = btn.getAttribute('data-filter');
+                    
+                    productCards.forEach(card => {
+                        if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        }
+
+        function openModal(name, image, ingredients, taste, price) {
+            const modal = document.getElementById('product-modal');
+            document.getElementById('modal-name').textContent = name;
+            document.getElementById('modal-img').src = image;
+            document.getElementById('modal-ingredients').innerHTML = `<strong>Ingredients:</strong> ${ingredients}`;
+            document.getElementById('modal-taste').innerHTML = `<strong>Taste:</strong> ${taste}`;
+            document.getElementById('modal-price').textContent = price;
+            modal.style.display = 'block';
+        }
+
+        function addToCart(name, price) {
+            // Simple cart functionality - you can expand this
+            alert(`${name} (${price}) added to cart!`);
+        }
+
+        // Modal functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('product-modal');
+            const closeBtn = document.querySelector('.close-modal');
+
+            closeBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+
+            window.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+
+            // Load products when page loads
+            loadProducts();
+        });
+    </script>
+</body>
+</html>

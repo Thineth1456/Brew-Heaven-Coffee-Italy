@@ -1,0 +1,70 @@
+[
+  {  "image": "image/Coffe1.jpeg",
+    "name": "Espresso",
+    "ingredients": "Finely ground coffee beans, hot water",
+    "taste": "Strong and bold",
+    "price": "$2.50"
+  },
+  {
+          "image": "image/Coffe2.jpeg",
+    "name": "Cappuccino",
+    "ingredients": "Espresso, steamed milk, milk foam",
+    "taste": "Creamy and rich",
+    "price": "$3.50"
+  },
+  {
+          "image": "image/Coffe3.jpeg",
+    "name": "Latte",
+    "ingredients": "Espresso, steamed milk",
+    "taste": "Smooth and mild",
+    "price": "$3.00"
+  },
+  {
+          "image": "image/Coffe4.jpeg",
+    "name": "Americano",
+    "ingredients": "Espresso, hot water",
+    "taste": "Light and smooth",
+    "price": "$2.75"
+  },
+  {
+          "image": "image/Coffe5.jpeg",
+    "name": "Mocha",
+    "ingredients": "Espresso, chocolate syrup, steamed milk, whipped cream",
+    "taste": "Chocolatey and sweet",
+    "price": "$3.75"
+  },
+  {
+          "image": "image/Coffe6.jpeg",
+    "name": "Macchiato",
+    "ingredients": "Espresso, a dash of milk foam",
+    "taste": "Rich and slightly creamy",
+    "price": "$3.20"
+  },
+  {
+          "image": "image/Coffe1.jpeg",
+    "name": "Flat White",
+    "ingredients": "Espresso, microfoam milk",
+    "taste": "Velvety and strong",
+    "price": "$3.40"
+  },
+  {
+          "image": "image/Coffe2.jpeg",
+    "name": "Irish Coffee",
+    "ingredients": "Hot coffee, Irish whiskey, sugar, cream",
+    "taste": "Warm, bold, slightly sweet",
+    "price": "$4.50"
+  },
+  { "image": "image/Coffe5.jpeg",
+    "name": "Cold Brew",
+    "ingredients": "Coarse ground coffee, cold water, ice",
+    "taste": "Smooth and less acidic",
+    "price": "$3.80"
+  },
+  {
+          "image": "image/Coffe4.jpeg",
+    "name": "Affogato",
+    "ingredients": "Vanilla ice cream, hot espresso",
+    "taste": "Sweet, bitter, and creamy",
+    "price": "$4.00"
+  }
+]
